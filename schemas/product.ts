@@ -56,6 +56,12 @@ export const product = defineType({
       validation: (rule) => rule.required().positive(),
     }),
     defineField({
+      name: 'comparePrice',
+      title: 'Compare-at Price',
+      type: 'number',
+      description: 'Original price before discount. Leave empty if not on sale.',
+    }),
+    defineField({
       name: 'images',
       title: 'Images',
       type: 'array',

@@ -13,10 +13,10 @@ export const order = defineType({
     }),
     defineField({
       name: 'status',
-      title: 'Payment Status',
+      title: 'Order Status',
       type: 'string',
       options: {
-        list: ['pending', 'awaiting_payment', 'success', 'failed'],
+        list: ['pending', 'awaiting_payment', 'success', 'failed', 'processing', 'shipped', 'delivered'],
       },
       initialValue: 'pending',
     }),
