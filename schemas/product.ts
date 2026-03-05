@@ -9,7 +9,7 @@ export const product = defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
-      validation: (rule) => rule.required(),
+      description: 'Leave blank for fabric variants — they are named automatically from their tag.',
     }),
     defineField({
       name: 'slug',
@@ -45,10 +45,40 @@ export const product = defineType({
       description: 'Level 3 category tags for this product',
     }),
     defineField({
+      name: 'priceType',
+      title: 'Price Type',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Single (fixed price)', value: 'single'},
+          {title: 'Range (min – max)', value: 'range'},
+        ],
+      },
+      initialValue: 'single',
+      description: 'Single = one fixed price. Range = customer pays within a min–max bandwidth set by admin.',
+    }),
+    defineField({
       name: 'price',
       title: 'Price',
       type: 'number',
+      description: 'Fixed price when Price Type is Single, or the minimum price when Range.',
       validation: (rule) => rule.required().positive(),
+    }),
+    defineField({
+      name: 'priceMax',
+      title: 'Maximum Price',
+      type: 'number',
+      description: 'Only used when Price Type is Range. The upper end of the price bandwidth.',
+      hidden: ({document}) => document?.priceType !== 'range',
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const doc = context.document as {priceType?: string; price?: number}
+          if (doc?.priceType === 'range') {
+            if (!value) return 'Maximum price is required for range pricing'
+            if (doc.price && value <= doc.price) return 'Must be greater than the minimum price'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'comparePrice',
@@ -105,6 +135,13 @@ export const product = defineType({
       name: 'featured',
       title: 'Featured',
       type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'isFabricVariant',
+      title: 'Fabric Variant',
+      type: 'boolean',
+      description: 'Enable for images in the Fabrics category. Pricing, unit, and description come from the tag.',
       initialValue: false,
     }),
   ],

@@ -68,6 +68,54 @@ export const category = defineType({
       initialValue: 0,
       description: 'Lower numbers appear first',
     }),
+    // ── Fabric-specific fields (only for level-3 tags under the Fabrics category) ──
+    defineField({
+      name: 'fabricPrice',
+      title: 'Fabric Price (NGN)',
+      type: 'number',
+      description: 'Price per N units of the chosen metric (e.g. ₦3,000 per 2 yards)',
+      hidden: ({document}) => document?.level !== 3,
+    }),
+    defineField({
+      name: 'fabricPricePerN',
+      title: 'Units per Price',
+      type: 'number',
+      description: 'How many units of the metric are included in the price (the N in "₦X per N yards")',
+      hidden: ({document}) => document?.level !== 3,
+      initialValue: 1,
+    }),
+    defineField({
+      name: 'fabricUnit',
+      title: 'Fabric Unit',
+      type: 'string',
+      description: 'Measurement unit for this fabric tag',
+      hidden: ({document}) => document?.level !== 3,
+      options: {
+        list: [
+          {title: 'Yard', value: 'yard'},
+          {title: 'Meter', value: 'meter'},
+          {title: 'Piece', value: 'piece'},
+          {title: 'Roll', value: 'roll'},
+          {title: 'Kg', value: 'kg'},
+          {title: 'Length', value: 'length'},
+        ],
+      },
+    }),
+    defineField({
+      name: 'minQuantity',
+      title: 'Minimum Order Quantity',
+      type: 'number',
+      description: 'Minimum units a customer must order',
+      hidden: ({document}) => document?.level !== 3,
+      initialValue: 1,
+    }),
+    defineField({
+      name: 'maxQuantity',
+      title: 'Maximum Order Quantity',
+      type: 'number',
+      description: 'Maximum units a customer may order. Leave blank for no limit.',
+      hidden: ({document}) => document?.level !== 3,
+    }),
   ],
   orderings: [
     {
